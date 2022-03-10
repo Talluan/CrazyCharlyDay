@@ -106,7 +106,6 @@ function displayNav() {
 
 function displayBox(params) {
     let box = document.getElementById("box")
-    console.log(box)
 
     box.style.backgroundColor = "grey"
     box.innerHTML = "coucou"

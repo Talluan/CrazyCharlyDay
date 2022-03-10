@@ -22,7 +22,6 @@ module.exports = app => {
     app.get('/api/produit/:id', (req, res) => {
         Produit.trouverProduit(req.params.id)
         .then(produit => {
-            console.log(produit);
             res.json(
                 {
                     id: produit.id,
