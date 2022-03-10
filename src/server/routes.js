@@ -48,7 +48,7 @@ module.exports = app => {
             req.body.idBox,
             req.body.idDestinataire,
             req.body.content
-        );
+        ).then(() => res.end());
     });
     app.post('/api/produit',(req, res) => {
         Produit.creerProduit(
@@ -56,7 +56,7 @@ module.exports = app => {
             req.body.description,
             req.body.categorie,
             req.body.poids
-        ).then(res.end);
+        ).then(() => res.end());
     });
     app.post('/api/categorie',(req, res) => {
         Categorie.creerCategorie(req.body.nom).then(() => res.end());
@@ -86,19 +86,19 @@ module.exports = app => {
             req.body.message,
             req.body.idBox,
             req.body.idDestinataire,
-            req.body.content);
+            req.body.content).then(() => res.end()).catch(err => res.status(500).json(err));
     });
     app.put('/api/categorie/:id', (req, res) => {
-        Categorie.modifierCategorie(req.params.id, req.body.nom);
+        Categorie.modifierCategorie(req.params.id, req.body.nom).then(() => res.end()).catch(err => res.status(500).json(err));
     });
     app.delete('/api/produit/:id', (req, res) => {
-        Produit.supprimerProduit(req.params.id);
+        Produit.supprimerProduit(req.params.id).then(() => res.end()).catch(err => res.status(500).json(err));
     });
     app.delete('/api/commande/:id', (req, res) => {
-        Commande.supprimerCommande(req.params.id);
+        Commande.supprimerCommande(req.params.id).then(() => res.end()).catch(err => res.status(500).json(err));
     });
     app.delete('/api/categorie/:id', (req, res) => {
-        Categorie.supprimerCategorie(req.params.id);
+        Categorie.supprimerCategorie(req.params.id).then(() => res.end()).catch(err => res.status(500).json(err));
     });
     app.post('/register', (req, res) => {
         const b = req.body;
