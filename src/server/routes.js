@@ -117,7 +117,7 @@ module.exports = app => {
             res.send('err');
         });
     });
-    app.post('login', (req, res) => {
+    app.post('/login', (req, res) => {
         User.testerUser(validator.escape(req.body.id),validator.escape(req.body.mdp)).then(user => {
             if(user) {
                 req.session.userid = user.id;
