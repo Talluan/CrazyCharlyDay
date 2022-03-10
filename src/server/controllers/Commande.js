@@ -16,7 +16,7 @@ function listerCommande() {
                     message: commande.message,
                     idbox: commande.idbox,
                     token: commande.token,
-                    idDestinatire: commande.idDestinatire
+                    idDestinatire: commande.idDestinataire
                 };
             });
             resolve(list);
@@ -50,19 +50,33 @@ function listerProduits(idCommande) {
 /**
  * Cree une nouvelle commande
  */
-function creerCommande(idUser, couleur, message, idbox, idDestinataire) {
+function creerCommande(idUser, couleur, message, idbox, idDestinataire, content) {
     const Commande = Models.getCommande();
+    const Arrangement = Models.getArrangement();
     const token = bCrypt.hashSync(idUser + couleur + message + idbox + idDestinataire, 1);
+
     return new Promise((resolve, reject) => {
+        //on crée la commande
         Commande.create({
             idUser: idUser,
             couleur: couleur,
             message: message,
             idbox: idbox,
             token: token,
-            idDestinatire: idDestinataire
-        }).then(resolve).catch(reject);
-    });
+            idDestinataire: idDestinataire
+        }).then(data => {
+            //on met à jour les arrangements
+            content.forEach((idProduit, qte) => {
+                Arrangement.create({
+                    idCommande: data.idCommande,
+                    idProduit: idProduit,
+                    qte: qte
+                })
+            })
+        })
+        resolve()
+    })
+
 }
 
 function trouverCommande(idCommande) {
