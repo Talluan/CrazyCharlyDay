@@ -8,8 +8,7 @@ function init() {
     catalogue.displayNav()
 
     let commander = document.getElementById("commander")
-
-    commander.addEventListener("click", cart.commander())
+    commander.addEventListener("click", cart.commanderCart)
 }
 
 window.onload = init;

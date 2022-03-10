@@ -1,4 +1,5 @@
 import { getProductInfo, setModalContent } from "./products.js";
+import { config } from "./config.js";
 
 let cart_produits = [];
 
@@ -105,10 +106,21 @@ function updateBoxContainer() {
 }
 
 function commanderCart() {
-
+    let data = {
+        idUser: null,
+        couleur: document.getElementById("couleur").value.substring(1, document.getElementById("couleur").value.length-1),
+        message: document.getElementById("message").value,
+        idBox: document.getElementById("idBox").value,
+        idDestinataire: document.getElementById("idDestinataire").value,
+        content: cart_produits.map(p => {return {id: p.id, quantite: p.quantite}})
+    };
+    fetch(config.host + "/api/commande", {method: "POST", body: JSON.stringify(data)}).then(
+        () => {console.log("envoyé");}
+    );
 }
 
 export default {
     updateBoxContainer,
-    ajouterProduit
+    ajouterProduit,
+    commanderCart
 }

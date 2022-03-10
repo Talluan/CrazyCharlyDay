@@ -81,7 +81,7 @@ function listerProduits(idCommande) {
 function creerCommande(idUser, couleur, message, idbox, idDestinataire, content) {
     const Commande = Models.getCommande();
     const Arrangement = Models.getArrangement();
-    const token = bCrypt.hashSync(idUser + couleur + message + idbox + idDestinataire, 1);
+    const token = bCrypt.hashSync("" + idUser + couleur + message + idbox + idDestinataire, 1);
 
     const commande = Commande.build({
         idUser: idUser,
@@ -94,16 +94,15 @@ function creerCommande(idUser, couleur, message, idbox, idDestinataire, content)
 
     return new Promise((resolve, reject) => {
         commande.save()
-            .then(
-                //on met à jour les arrangements
+            .then(content => {
                 content.forEach((idProduit, qte) => {
                     Arrangement.create({
                         idCommande: commande.id,
                         idProduit: idProduit,
                         qte: qte
                     })
-                })
-            );
+                });
+            });
         resolve()
     })
 
