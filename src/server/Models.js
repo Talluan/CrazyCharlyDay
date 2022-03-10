@@ -73,8 +73,7 @@ function init() {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
-            autoIncrement: true,
-            allowNull: false
+            autoIncrement: true
         },
         titre: {
             type: DataTypes.STRING,
@@ -215,7 +214,7 @@ function init() {
     Produit.belongsToMany(Commande, {
         through: Arrangement,
         foreignKey: "idProduit",
-        otherKey: "idCommande"
+        otherKey: "idCommande",
     });
 
     Produit.belongsTo(Categorie, {
@@ -232,6 +231,12 @@ function init() {
     Avis.hasOne(Produit, {
         foreignKey: "idProduit",
         targetKey: "id"
+    });
+
+    Categorie.hasMany(Produit, {
+        foreignKey: "categorie",
+        targetKey: "id",
+        as: "produits"
     });
 }
 

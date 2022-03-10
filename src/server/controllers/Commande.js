@@ -1,19 +1,21 @@
-const Models = require("../Models");
+const Models = require('../Models');
 
 /**
- * renvoie la liste des produits sous forme d'un JSON
+ * renvoie la liste des commandes sous forme d'un JSON
  */
-function listerProduits() {
-    const Produit = Models.getProduit();
+function listerCommande() {
+    const Commande = Models.getCommande();
     return new Promise((resolve, reject) => {
-        Produit.findAll().then(produits => {
-            const list = produits.map(produit => {
+        Commande.findAll().then(commandes => {
+            const list = commandes.map(commande => {
                 return {
-                    id: produit.id,
-                    titre: produit.titre,
-                    description: produit.description,
-                    categorie: produit.categorie,
-                    poids: produit.poids
+                    id: commande.id,
+                    idUser: commande.idUser,
+                    couleur: commande.couleur,
+                    message: commande.message,
+                    idbox: commande.idbox,
+                    token: commande.token,
+                    idDestinatire: commande.idDestinatire
                 };
             });
             resolve(list);
@@ -22,13 +24,15 @@ function listerProduits() {
 }
 
 /**
- * Cree un nouveau produit
+ * Cree une nouvelle commande
  * @param {string} titre titre du produit
  * @param {string} description description du produit
  * @param {string} categorie categorie du produit
  * @param {number} poids poids du produit
  */
-function creerProduit(titre, description, categorie, poids) {
+function creerCommande(isUser, couleur, message, idbox, idDestinatire) {
+    //TODO: créer le token
+    const tokent = null;
     return new Promise((resolve, reject) => {
         Produit.create({
             titre: titre,
@@ -38,7 +42,6 @@ function creerProduit(titre, description, categorie, poids) {
         }).then(resolve).catch(reject);
     });
 }
-
 
 function trouverProduit(idProduit) {
     // return the promise itself

@@ -16,12 +16,29 @@ function listerCategories() {
             resolve(list);
         }).catch(v => {
             reject(v);
-            console.clear();
-            console.log(v);
         });
     });
 }
 
+function getCategorieProduits(id) {
+    const Produit = Models.getProduit();
+    return new Promise((resolve, reject) => {
+        Produit.findAll({where: {categorie: id}, attributes: ["id", "titre", "description", "poids", "categorie"]}).then(produits => {
+            const list = produits.map(produit => {
+                return {
+                    id: produit.id,
+                    titre: produit.titre,
+                    description: produit.description,
+                    categorie: produit.categorie,
+                    poids: produit.poids
+                };
+            });
+            resolve(list);
+        }).catch(reject);
+    });
+}
+
 module.exports = {
-    listerCategories
+    listerCategories,
+    getCategorieProduits
 };
