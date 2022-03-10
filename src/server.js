@@ -1,12 +1,23 @@
-const http = require('http');
+const https = require('https');
 const express = require('express');
 const fs = require("fs");
 const { Server } = require("socket.io");
 const { Sequelize, DataTypes } = require('@sequelize/core');
 const { exit } = require('process');
 
+// redirection de http vers https
+require('http').createServer((req, res) => {
+    res.writeHead(301,{Location: `https://${req.headers.host}${req.url}`});
+    res.end();
+}).listen(80);
+
+let credentials = {
+    key: fs.readFileSync("./credentials/key.pem", "utf-8"),
+    cert: fs.readFileSync("./credentials/cert.pem", "utf-8")
+};
+
 const app = express();
-const server = http.createServer(app);
+const server = https.createServer(credentials, app);
 const io = new Server(server);
 
 let sequelize = null;
