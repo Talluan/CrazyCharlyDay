@@ -33,7 +33,7 @@ mail.onchange = () => {
 }
 
 tel.onchange = () => {
-    telText.innerHTML = tel.value + " g";
+    telText.innerHTML = tel.value;
 }
 
 (function() {
