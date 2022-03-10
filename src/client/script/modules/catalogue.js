@@ -1,7 +1,8 @@
 import config from "./config.js"
 
 function getCategories() {
-    let pr = fetch(config.host + config.categories)
+    console.log(config.config.host + "/api/categories")
+    let pr = fetch(config.host + "/api/categories")
     pr.then(resp => {
             if (resp.ok) {
                 return resp.json();
@@ -15,14 +16,24 @@ function getCategories() {
         })
 }
 
+function loadResource(uri) {
+    return new Promise((resolve, reject) => {
+        fetch(config.config.host + uri).then(response => response.json()).then(data => {
+            resolve(data);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
 function getProducts(id) {
     let pr = fetch(config.host + config.categorie + id + "/produits")
     pr.then(resp => {
             if (resp.ok) {
                 return resp.json();
             } else {
-                console.log('response error : ' + response.status)
-                return Promise.reject(new Error(response.statusText))
+                console.log('response error : ' + resp.status)
+                return Promise.reject(new Error(resp.statusText))
             }
         })
         .catch(error => {
@@ -59,27 +70,29 @@ function createProduct(nom, id) {
  * méthode qui met à jour le nav de l'index
  */
 function displayNav() {
-    let categories = getCategories()
-    console.log(categories)
-    let cat = document.getElementById("categories")
-    cat.innerHTML = ""
-    let html = "";
+    // fetch('https://localhost/api/categories').then(e => e.json()).then(e => console.log(e));
+    let categories = loadResource("/api/categories").then(elem => {
+        let cat = document.getElementById("categories")
+        let html = "";
+
+        Array.of(elem).forEach(element => {
+            html += createCategory(element.nom)
+            let ul = document.createElement("ul")
+            ul.classList.add("btn-toggle-nav", "list-unstyled", "fw-normal", "pb-1", "small")
+            let products = loadResource("/api/categorie/" + element.id + "/produits").then(produits => {
+                // Liste des produits de la catégorie
+                let productsHTML = "";
+                produits.forEach(prod => {
+                    productsHTML += createProduct(prod.titre, prod.id)
+                });
+            })
 
 
-    categories.forEach(element => {
-        html += createCategory(element.nom)
-        let ul = document.createElement("ul")
-        ul.classList.add("btn-toggle-nav", "list-unstyled", "fw-normal", "pb-1", "small")
-        let products = getProducts(element.id)
-
-        // Liste des produits de la catégorie
-        let productsHTML = "";
-        products.forEach(element => {
-            productsHTML += createProduct(element.titre, element.id)
         });
+
+        cat.innerHTML = html
     });
 
-    cat.innerHTML = html
 
 }
 

@@ -23,11 +23,11 @@ descr.onchange = () => {
 }
 
 prix.onchange = () => {
-    prixText.innerHTML = prix.value;
+    prixText.innerHTML = prix.value + " €";
 }
 
 poids.onchange = () => {
-    poidsText.innerHTML = poids.value;
+    poidsText.innerHTML = poids.value + " g";
 }
 
 

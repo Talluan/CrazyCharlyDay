@@ -1,7 +1,5 @@
 const config = {
-    "host": "https://localhost/",
-    "categories": "api/categories",
-    "categorie": "api/categorie/"
+    "host": "https://localhost"
 }
 
 export default {
