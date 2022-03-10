@@ -80,6 +80,7 @@ function updateBoxContainer() {
 
 }
 
+
 export default {
     updateBoxContainer,
     ajouterProduit
