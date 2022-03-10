@@ -53,11 +53,11 @@ function creerCarte(produit, quantite) {
     `
     let cFooter = document.createElement("div")
     cFooter.classList.add("card-footer")
-    const divcol= document.createElement("div")
+    const divcol = document.createElement("div")
     divcol.classList.add("col")
-    const divrow= document.createElement("div")
+    const divrow = document.createElement("div")
     divrow.classList.add("row")
-    const divcol2= document.createElement("div")
+    const divcol2 = document.createElement("div")
     divcol2.classList.add("col")
     divcol2.classList.add("d-flex")
     divcol2.classList.add("justify-content-center")
@@ -67,7 +67,7 @@ function creerCarte(produit, quantite) {
     button.innerHTML = "X"
     button.onclick = () => supprimerProduit(produit.id);
     divcol2.appendChild(button);
-    const divcol3= document.createElement("div")
+    const divcol3 = document.createElement("div")
     divcol3.classList.add("col")
     divcol3.classList.add("d-flex")
     divcol3.classList.add("justify-content-center")
@@ -76,7 +76,7 @@ function creerCarte(produit, quantite) {
     a.dataset.bsToogle = "modal";
     a.dataset.bsTarget = "#exampleModal";
     a.innerHTML = `<span class="badge bg-info">i</span>`;
-    a.onclick = () => {setModalContent(produit.id)};
+    a.onclick = () => { setModalContent(produit.id) };
     divcol3.appendChild(a)
     divrow.appendChild(divcol2)
     divrow.appendChild(divcol3)
@@ -105,7 +105,7 @@ function updateBoxContainer() {
 }
 
 function commanderCart() {
-    
+
 }
 
 export default {
