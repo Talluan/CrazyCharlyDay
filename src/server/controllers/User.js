@@ -1,4 +1,4 @@
-const { User } = require("../Models");
+const Models = require("../Models");
 const bCrypt = require("bcrypt");
 
 /**
@@ -17,13 +17,14 @@ function creerUser(login, mdp, nom, prenom, mail, tel) {
             bCrypt.hash(mdp, salt, (err, hash) => {
                 if (err) reject(err);
                 else {
-                    User.create({
+                    Models.getUser().create({
                         login: login,
                         mdp: hash,
                         nom: nom,
                         prenom: prenom,
                         mail: mail,
-                        tel: tel
+                        tel: tel,
+                        estAdmin: 0
                     }).then(resolve)
                     .catch(reject);
                 }
@@ -32,13 +33,38 @@ function creerUser(login, mdp, nom, prenom, mail, tel) {
     });
 }
 
+function trouverID(login) {
+    return new Promise((resolve, reject) => {
+        Models.getUser().findOne({
+            where: {login: login},
+            attributes: ['id']
+        }).then(resolve)
+        .catch(e=>console.log(e));
+    });
+}
+function testerUser(login,mdp){
+    return new Promise((resolve, reject) => {
+        Models.getUser().findOne({
+            where: {login: login},
+            attributes: ['id','mdp']
+        }).then(user => {
+            if(user){
+                bCrypt.compare(mdp, user.mdp, (err, res) => {
+                    if(err) reject(err);
+                    else if(res) resolve(user);
+                    else reject("Mot de passe incorrect");
+                });
+            }else reject("Utilisateur inconnu");
+        }).catch(reject);
+    });
+}
 /**
  * Supprime un User
  * @param {number} id id du user
  */
 function supprimerUser(id) {
     return new Promise((resolve, reject) => {
-        User.destroy({
+        Models.getUser().destroy({
             where: {id: id}
         }).then(resolve).catch(reject);
     });
@@ -46,5 +72,7 @@ function supprimerUser(id) {
 
 module.exports = {
     creerUser,
-    supprimerUser
+    supprimerUser,
+    trouverID,
+    testerUser
 };
