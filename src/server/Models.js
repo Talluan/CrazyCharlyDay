@@ -20,7 +20,7 @@ const Avis = bdd.getBdd().define("avis", {
         allowNull: false
     },
     nbEtoiles: {
-        type: DataTypes.FLOAT,
+        type: DataTypes.INTEGER,
         allowNull: false
     },
     certifie: {
