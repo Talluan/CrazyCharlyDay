@@ -19,15 +19,18 @@ module.exports = app => {
     });
     app.get('/api/produit/:id', (req, res) => {
         Produit.trouverProduit(req.params.id)
-        .then(produit => res.json(
-            {
-                id: produit.id,
-                nom: produit.nom,
-                description: produit.description,
-                prix: produit.prix,
-                poids: produit.poids
-            }
-        ))
+        .then(produit => {
+            console.log(produit);
+            res.json(
+                {
+                    id: produit.id,
+                    titre: produit.titre,
+                    description: produit.description,
+                    categorie: produit.categorie,
+                    poids: produit.poids
+                }
+            )
+        })
         .catch(err => res.status(500).json(err));
     });
     app.get('/api/commande/:idcommande/', (req, res) => {
@@ -56,7 +59,7 @@ module.exports = app => {
     app.post('/api/categorie',(req, res) => {
 
     });
-    app.put('/api/produit/:id', (res, req) => {
+    app.put('/api/produit/:id', (req, res) => {
         Produit.trouverProduit(req.params.id).then(produit => {
             if (produit) {
                 produit.update({
@@ -75,7 +78,7 @@ module.exports = app => {
             }
         }).catch(err => res.status(500).json(err));
     });
-    app.put('/api/commande/:id', (res, req) => {
+    app.put('/api/commande/:id', (req, res) => {
         // Commande.trouverCommande(req.params.id).then(commande => {
         //     if (commande) {
         //         commande.update({
@@ -99,12 +102,12 @@ module.exports = app => {
     app.put('/api/categorie/:id', (res, req) => {
         
     });
-    app.delete('/api/produit/:id', (res, req) => {
+    app.delete('/api/produit/:id', (req, res) => {
         Produit.supprimerProduit(res.params.id);
     });
-    app.delete('/api/commande/:id', (res, req) => {
+    app.delete('/api/commande/:id', (req, res) => {
         Commande.supprimerCommande(res.params.id);
     });
-    app.delete('/api/categorie/:id', (res, req) => {
+    app.delete('/api/categorie/:id', (req, res) => {
     });
 };

@@ -45,7 +45,8 @@ function trouverProduit(idProduit) {
     const Produit = Models.getProduit();
     return new Promise((resolve, reject) => {
         Produit.findOne({
-            where: {id: idProduit}
+            where: {id: idProduit},
+            attributes: ["id", "titre", "description", "poids", "categorie"]
         }).then(resolve)
         .catch(reject);
     });
