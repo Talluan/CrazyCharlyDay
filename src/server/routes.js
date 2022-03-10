@@ -90,10 +90,10 @@ module.exports = app => {
         Categorie.modifierCategorie(req.params.id, req.body.nom);
     });
     app.delete('/api/produit/:id', (req, res) => {
-        Produit.supprimerProduit(res.params.id);
+        Produit.supprimerProduit(req.params.id);
     });
     app.delete('/api/commande/:id', (req, res) => {
-        Commande.supprimerCommande(res.params.id);
+        Commande.supprimerCommande(req.params.id);
     });
     app.delete('/api/categorie/:id', (req, res) => {
         Categorie.supprimerCategorie(req.params.id);
