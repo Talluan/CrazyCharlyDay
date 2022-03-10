@@ -248,5 +248,6 @@ module.exports = {
     getAvis: () => {return Avis;},
     getUser: () => {return User;},
     getDestinataire: () => {return Destinataire;},
+    getArrangement: () => {return Arrangement;},
     init
 };

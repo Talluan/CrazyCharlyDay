@@ -41,17 +41,12 @@ function creerProduit(titre, description, categorie, poids) {
 
 
 function trouverProduit(idProduit) {
-    // return the promise itself
-    return Produit.find({
-        where: {
-           id: idProduit
-        }
-     }).then(device => {
-        if (!device) {
-            return 'not find';
-        }
-        return device.dataValues;
-     });
+    return new Promise((resolve, reject) => {
+        Produit.findOne({
+            where: {id: idProduit}
+        }).then(resolve)
+        .catch(reject);
+    });
 }
 
 /**
