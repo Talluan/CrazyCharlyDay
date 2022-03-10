@@ -1,0 +1,30 @@
+{
+  "name": "template",
+  "version": "0.1.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FurWaz/template.git"
+  },
+  "keywords": [
+    "FurWaz",
+    "template"
+  ],
+  "author": "FurWaz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FurWaz/template/issues"
+  },
+  "homepage": "https://github.com/FurWaz/template#readme",
+  "dependencies": {
+    "@sequelize/core": "^7.0.0-alpha.10",
+    "express": "^4.17.1",
+    "sequelize": "^6.17.0",
+    "socket.io": "^4.4.0"
+  }
+}
