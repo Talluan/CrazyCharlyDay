@@ -1,21 +1,5 @@
 import config from "./config.js"
 
-function getCategories() {
-    console.log(config.config.host + "/api/categories")
-    let pr = fetch(config.host + "/api/categories")
-    pr.then(resp => {
-            if (resp.ok) {
-                return resp.json();
-            } else {
-                console.log('response error : ' + response.status)
-                return Promise.reject(new Error(response.statusText))
-            }
-        })
-        .catch(error => {
-            console.log("erreur: " + error)
-        })
-}
-
 function loadResource(uri) {
     return new Promise((resolve, reject) => {
         fetch(config.config.host + uri).then(response => response.json()).then(data => {
@@ -62,8 +46,19 @@ function createCategory(nom) {
 function createProduct(nom, id) {
     let prod = document.createElement("li")
     prod.id = id
-    prod.innerHTML = nom + `<a type="button" data-bs-toggle="modal" data-bs-target="${id}"><span class="badge bg-info">i</span></a>`
-        // console.log(prod)
+    prod.innerHTML = `
+        <div class="row">
+            <div class="col-6">
+                ` + nom +
+        `
+            </div>
+            <div class="col-2">
+                <a type="button" data-bs-toggle="modal" data-bs-target="modal${id}"><span class="badge bg-info">i</span></a>
+            </div>
+        </div>
+        `
+
+    // console.log(prod)
     return prod
 }
 
