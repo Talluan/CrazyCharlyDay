@@ -1,5 +1,6 @@
 const https = require('https');
 const express = require('express');
+const bodyParser = require("body-parser");
 const fs = require("fs");
 const { Server } = require("socket.io");
 const bdd = require("./server/Bdd");
@@ -21,9 +22,16 @@ let credentials = {
 };
 
 const app = express();
+
+// parse requests of content-type - application/json
+app.use(bodyParser.json());
+
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true }));
+
 const server = https.createServer(credentials, app);
 const io = new Server(server);
-
+require("./server/routes.js")(app);
 app.get('/*', (req, res) => {
     let path = req.url;
     if (req.url == "/") path = "/index.html";
