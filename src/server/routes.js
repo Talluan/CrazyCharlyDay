@@ -49,15 +49,15 @@ module.exports = app => {
         );
     });
     app.post('/api/produit',(req, res) => {
-        Produit.create.creerProduit(
+        Produit.creerProduit(
             req.body.titre,
             req.body.description,
             req.body.categorie,
             req.body.poids
-        );
+        ).then(res.end);
     });
     app.post('/api/categorie',(req, res) => {
-
+        Categorie.creerCategorie(req.body.nom).then(() => res.end());
     });
     app.put('/api/produit/:id', (req, res) => {
         Produit.trouverProduit(req.params.id).then(produit => {
@@ -85,35 +85,17 @@ module.exports = app => {
             req.body.idBox,
             req.body.idDestinataire,
             req.body.content);
-        // Commande.trouverCommande(req.params.id).then(commande => {
-        //     if (commande) {
-        //         commande.update({
-        //             couleur: req.body.couleur,
-        //             message: req.body.message,
-        //             idBox: req.body.idBox,
-        //             idDestinataire: req.body.idDestinataire,
-        //             content: req.body.content
-        //         });
-        //     } else {
-        //         Commande.create({
-        //             couleur: req.body.couleur,
-        //             message: req.body.message,
-        //             idBox: req.body.idBox,
-        //             idDestinataire: req.body.idDestinataire,
-        //             content: req.body.content
-        //         });
-        //     }
-        // }).catch(err => res.status(500).json(err));
     });
     app.put('/api/categorie/:id', (req, res) => {
-        
+        Categorie.modifierCategorie(req.params.id, req.body.nom);
     });
     app.delete('/api/produit/:id', (req, res) => {
-        Produit.supprimerProduit(res.params.id);
+        Produit.supprimerProduit(req.params.id);
     });
     app.delete('/api/commande/:id', (req, res) => {
-        Commande.supprimerCommande(res.params.id);
+        Commande.supprimerCommande(req.params.id);
     });
     app.delete('/api/categorie/:id', (req, res) => {
+        Categorie.supprimerCategorie(req.params.id);
     });
 };
