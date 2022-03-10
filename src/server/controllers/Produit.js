@@ -29,6 +29,7 @@ function listerProduits() {
  * @param {number} poids poids du produit
  */
 function creerProduit(titre, description, categorie, poids) {
+    const Produit = Models.getProduit();
     return new Promise((resolve, reject) => {
         Produit.create({
             titre: titre,
@@ -42,6 +43,7 @@ function creerProduit(titre, description, categorie, poids) {
 
 function trouverProduit(idProduit) {
     return new Promise((resolve, reject) => {
+        const Produit = Models.getProduit();
         Produit.findOne({
             where: {id: idProduit}
         }).then(resolve)
@@ -54,6 +56,7 @@ function trouverProduit(idProduit) {
  * @param {number} id id du produit
  */
 function supprimerProduit(id) {
+    const Produit = Models.getProduit();
     return new Promise((resolve, reject) => {
         Produit.destroy({
             where: {id: id}
