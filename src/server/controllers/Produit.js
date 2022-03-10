@@ -31,6 +31,7 @@ function listerProduits() {
 function creerProduit(titre, description, categorie, poids) {
     const Produit = Models.getProduit();
     return new Promise((resolve, reject) => {
+        console.log("poids: " + poids)
         Produit.create({
             titre: titre,
             description: description,

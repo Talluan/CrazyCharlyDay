@@ -51,7 +51,7 @@ app.get('/test', (req, res) => {
     res.send('ok');
 });
 app.get('/*', (req, res) => {
-    console.log(req.session.test);
+    console.log("ID USER : "+req.session.userid);
     let path = req.url;
     if (req.url == "/") path = "/index.html";
     path = path.split("?")[0];
