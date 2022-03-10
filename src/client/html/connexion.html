@@ -41,27 +41,37 @@
                     Connexion
                     </div>
                     <div class="card-body">
-                        <div class="col-6">
-                            <label for="id" class="form-label">Identifiant :</label>
-                            <div class="input-group has-validation">
-                                <input type="text" class="form-control" name="id" id="id" placeholder="xxIdentifiantxx" required>
-                                <div class="invalid-feedback">
-                                    L'Identifiant est invalide.
+
+
+
+                        <form class="needs-validation" method="post" action="/api/produit" novalidate>
+                            <div class="row g-3">
+            
+                                <div class="col-6">
+                                    <label for="id" class="form-label">Identifiant :</label>
+                                    <div class="input-group has-validation">
+                                        <input type="text" class="form-control" name="id" id="id" placeholder="xxIdentifiantxx" required>
+                                        <div class="invalid-feedback">
+                                            L'Identifiant est invalide.
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="col-6">
-                            <label for="mdp" class="form-label">Mot de Passe :</label>
-                            <div class="input-group has-validation">
-                                <input type="text" class="form-control" name="mdp" id="mdp" placeholder="motdepasse" required>
-                                <div class="invalid-feedback">
-                                    Le mot de passe n'est pas valide.
+                                <br>
+                                <div class="col-6">
+                                    <label for="mdp" class="form-label">Mot de Passe :</label>
+                                    <div class="input-group has-validation">
+                                        <input type="text" class="form-control" name="mdp" id="mdp" placeholder="motdepasse" required>
+                                        <div class="invalid-feedback">
+                                            Le mot de passe n'est pas valide.
+                                        </div>
+                                    </div>
                                 </div>
+            
+            
+                                <hr class="my-3">
+                                <button class="w-100 btn btn-primary btn-lg" type="connect">Se connecter</button>
                             </div>
-                        </div>
-                        <br>
-                    <a href="#" class="btn btn-primary">Se connecter</a>
+                        </form>
                     </div>
                 </div>
     
