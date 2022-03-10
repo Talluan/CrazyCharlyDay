@@ -1,6 +1,34 @@
 const Models = require('../Models');
 const bCrypt = require('bcrypt');
 
+function modifierCommande(idCommande, idUser, couleur, message, idbox, idDestinataire, content) {
+    const Commande = Models.getCommande();
+    const Arrangement = Models.getArrangement();
+    return new Promise((resolve, reject) => {
+        Commande.update(
+            { idUser: idUser },
+            { couleur: couleur},
+            {message: message},
+            {idbox : idbox},
+            {idDestinataire: idDestinataire},
+            { where: { id: idCommande } }
+        )
+        //on supprime et recrée les arrangements
+        Arrangement.destroy({
+            where: {id: idCommande}
+        })
+        content.forEach((idProduit, qte) => {
+            Arrangement.create({
+                idCommande: data.idCommande,
+                idProduit: idProduit,
+                qte: qte
+            })
+        })
+        resolve()
+    });
+
+}
+
 /**
  * renvoie la liste des commandes sous forme d'un JSON
  */
@@ -55,25 +83,27 @@ function creerCommande(idUser, couleur, message, idbox, idDestinataire, content)
     const Arrangement = Models.getArrangement();
     const token = bCrypt.hashSync(idUser + couleur + message + idbox + idDestinataire, 1);
 
+    const commande = Commande.build({
+        idUser: idUser,
+        couleur: couleur,
+        message: message,
+        idbox: idbox,
+        token: token,
+        idDestinataire: idDestinataire
+    });
+
     return new Promise((resolve, reject) => {
-        //on crée la commande
-        Commande.create({
-            idUser: idUser,
-            couleur: couleur,
-            message: message,
-            idbox: idbox,
-            token: token,
-            idDestinataire: idDestinataire
-        }).then(data => {
-            //on met à jour les arrangements
-            content.forEach((idProduit, qte) => {
-                Arrangement.create({
-                    idCommande: data.idCommande,
-                    idProduit: idProduit,
-                    qte: qte
+        commande.save()
+            .then(
+                //on met à jour les arrangements
+                content.forEach((idProduit, qte) => {
+                    Arrangement.create({
+                        idCommande: commande.id,
+                        idProduit: idProduit,
+                        qte: qte
+                    })
                 })
-            })
-        })
+            );
         resolve()
     })
 
@@ -94,17 +124,18 @@ function trouverCommande(idCommande) {
      });
 }
 
-/**
- * supprime une commande
- * @param {number} id id de la commande
- */
-function supprimerCommande(id) {
+function supprimerCommande(idCommande) {
+    //on supprime les arrangements
     const Commande = Models.getCommande();
+    const Arrangement = Models.getArrangement();
     return new Promise((resolve, reject) => {
+        Arrangement.destroy({
+            where: {id: idCommande}
+        })
         Commande.destroy({
-            where: {id: id}
+            where: {id: idCommande}
         }).then(resolve).catch(reject);
-    });
+    })
 }
 
 module.exports = {
@@ -112,5 +143,6 @@ module.exports = {
     creerCommande,
     listerProduits,
     trouverCommande,
-    supprimerCommande
+    supprimerCommande,
+    modifierCommande
 };
