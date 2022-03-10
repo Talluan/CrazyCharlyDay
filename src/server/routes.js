@@ -1,7 +1,9 @@
 const express = require('express');
+var validator = require('validator');
 const Categorie = require("./controllers/Categorie");
 const Produit = require("./controllers/Produit");
 const Commande = require("./controllers/Commande");
+const User = require("./controllers/User");
 
 /**
  * @param {express.Express} app 
@@ -106,5 +108,33 @@ module.exports = app => {
         Commande.supprimerCommande(res.params.id);
     });
     app.delete('/api/categorie/:id', (res, req) => {
+    });
+    app.post('/register', (req, res) => {
+        const b = req.body;
+        
+        let identifiant = validator.escape(b.login);
+        // console.log(identifiant);
+        User.creerUser(validator.escape(b.login),validator.escape(b.password),validator.escape(b.Nom),validator.escape(b.userPrenom),validator.escape(b.mail),validator.escape(b.numPhone)).then(user => {
+            User.trouverID(validator.escape(b.login)).then(user => {
+                console.log("id "+user.id);
+                req.session.userid = user.id;
+                console.log("session "+req.session.userid);
+            });
+            res.writeHead(301,{Location: `https://${req.headers.host}/`});
+            res.end();
+        }).catch(err => {
+            res.send('err');
+        });
+    });
+    app.post('login', (req, res) => {
+        User.testerUser(validator.escape(req.body.id),validator.escape(req.body.mdp)).then(user => {
+            if(user) {
+                req.session.userid = user.id;
+                res.writeHead(301,{Location: `https://${req.headers.host}/`});
+                res.end();
+            } else {
+                res.send('Login Incorrect');
+            }
+        });
     });
 };

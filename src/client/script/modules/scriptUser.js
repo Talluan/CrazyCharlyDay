@@ -28,8 +28,8 @@ nom.onchange = () => {
     nomText.innerHTML = nom.value;
 }
 
-mail.onchange = () => {
-    mailText.innerHTML = mail.value;
+email.onchange = () => {
+    emailText.innerHTML = mail.value;
 }
 
 tel.onchange = () => {
@@ -59,4 +59,4 @@ prenom.onchange();
 login.onchange();
 mdp.onchange();
 tel.onchange();
-mail.onchange();
+email.onchange();

@@ -1,5 +1,8 @@
 const https = require('https');
 const express = require('express');
+const session = require('express-session');
+const cookieParser = require("cookie-parser");
+require('dotenv').config();
 const bodyParser = require("body-parser");
 const fs = require("fs");
 const { Server } = require("socket.io");
@@ -23,6 +26,13 @@ let credentials = {
 
 const app = express();
 
+app.use(session({
+    secret: process.env.secret,
+    saveUninitialized: false,
+    resave: false,
+    cookie: {secure: false}
+}));
+app.use(cookieParser());
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
 
@@ -32,7 +42,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const server = https.createServer(credentials, app);
 const io = new Server(server);
 require("./server/routes.js")(app);
+app.get('/test', (req, res) => {
+    // console.log(req.cookies['test']);
+    // res.cookie('test', 'test');
+    console.log(req.cookies['test']);
+    req.session.test = 'oui';
+    console.log(req.session.userid);
+    res.send('ok');
+});
 app.get('/*', (req, res) => {
+    console.log(req.session.test);
     let path = req.url;
     if (req.url == "/") path = "/index.html";
     path = path.split("?")[0];
