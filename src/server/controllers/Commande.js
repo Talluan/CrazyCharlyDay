@@ -1,4 +1,5 @@
 const Models = require('../Models');
+const bCrypt = require('bcrypt');
 
 /**
  * renvoie la liste des commandes sous forme d'un JSON
@@ -24,30 +25,52 @@ function listerCommande() {
 }
 
 /**
- * Cree une nouvelle commande
- * @param {string} titre titre du produit
- * @param {string} description description du produit
- * @param {string} categorie categorie du produit
- * @param {number} poids poids du produit
+ * renvoie la liste des produits de l'id de la commande donné sous forme d'un JSON
  */
-function creerCommande(isUser, couleur, message, idbox, idDestinatire) {
-    //TODO: créer le token
-    const tokent = null;
+function listerProduits(idCommande) {
+    const Commande = Models.getCommande();
+    const Arrangement = Models.getArrangement();
     return new Promise((resolve, reject) => {
-        Produit.create({
-            titre: titre,
-            description: description,
-            categorie: categorie,
-            poids: poids
+        Arrangement.find({
+            where: {
+               id: idCommande
+            }
+         }).then(couples => {
+            const list = couples.map(couple => {
+                return {
+                    idProduit: couple.idProduit,
+                    qte: couple.qte
+                };
+            });
+            resolve(list);
+        }).catch(reject);
+    });
+}
+
+/**
+ * Cree une nouvelle commande
+ */
+function creerCommande(idUser, couleur, message, idbox, idDestinataire) {
+    const Commande = Models.getCommande();
+    const token = bCrypt.hashSync(idUser + couleur + message + idbox + idDestinataire, 1);
+    return new Promise((resolve, reject) => {
+        Commande.create({
+            idUser: idUser,
+            couleur: couleur,
+            message: message,
+            idbox: idbox,
+            token: token,
+            idDestinatire: idDestinataire
         }).then(resolve).catch(reject);
     });
 }
 
-function trouverProduit(idProduit) {
+function trouverCommande(idCommande) {
+    const Commande = Models.getCommande();
     // return the promise itself
-    return Produit.find({
+    return Commande.find({
         where: {
-           id: idProduit
+           id: idCommande
         }
      }).then(device => {
         if (!device) {
@@ -58,20 +81,22 @@ function trouverProduit(idProduit) {
 }
 
 /**
- * supprime un produit
- * @param {number} id id du produit
+ * supprime une commande
+ * @param {number} id id de la commande
  */
-function supprimerProduit(id) {
+function supprimerCommande(id) {
+    const Commande = Models.getCommande();
     return new Promise((resolve, reject) => {
-        Produit.destroy({
+        Commande.destroy({
             where: {id: id}
         }).then(resolve).catch(reject);
     });
 }
 
 module.exports = {
+    listerCommande,
+    creerCommande,
     listerProduits,
-    creerProduit,
-    trouverProduit,
-    supprimerProduit
+    trouverCommande,
+    supprimerCommande
 };
