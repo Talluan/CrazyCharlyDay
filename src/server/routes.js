@@ -38,7 +38,7 @@ module.exports = app => {
         .then(commande => res.json(commande))
         .catch(err => res.status(500).json(err));   
     });
-    app.post('/api/commande', (res, req) => {
+    app.post('/api/commande', (req, res) => {
         Commande.creerCommande(
             req.body.idUser,
             req.body.couleur,
@@ -79,6 +79,12 @@ module.exports = app => {
         }).catch(err => res.status(500).json(err));
     });
     app.put('/api/commande/:id', (req, res) => {
+        Commande.modifierCommande(req.params.id, req.body.idUser,
+            req.body.couleur,
+            req.body.message,
+            req.body.idBox,
+            req.body.idDestinataire,
+            req.body.content);
         // Commande.trouverCommande(req.params.id).then(commande => {
         //     if (commande) {
         //         commande.update({
@@ -99,7 +105,7 @@ module.exports = app => {
         //     }
         // }).catch(err => res.status(500).json(err));
     });
-    app.put('/api/categorie/:id', (res, req) => {
+    app.put('/api/categorie/:id', (req, res) => {
         
     });
     app.delete('/api/produit/:id', (req, res) => {
