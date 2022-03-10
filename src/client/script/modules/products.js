@@ -29,3 +29,11 @@ export function setModalContent(idProduit) {
         </div>`;
     });
 }
+
+export function getProductInfo(id) {
+    return new Promise((resolve, reject) => {
+        fetch(config.host+"/api/produit/"+id).then(response => response.json()).then(produit => {
+            resolve(produit);
+        }).catch(reject);
+    })
+}
