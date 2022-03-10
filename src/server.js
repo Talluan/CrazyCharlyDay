@@ -6,7 +6,7 @@ const bdd = require("./server/Bdd");
 
 // base de donnee
 bdd.init().then(() => {
-    console.log("Bdd initialisee");
+    console.log("Module BDD initialise");
 });
 
 // redirection de http vers https
@@ -37,6 +37,6 @@ io.on("connection", socket => {
     socket.on("disconnect", r => {
         console.log("socket "+socket.id+" disconnected: "+r);
     });
-})
+});
 
 server.listen(443);
