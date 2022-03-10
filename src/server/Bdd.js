@@ -38,12 +38,10 @@ function init() {
             });
             bdd.authenticate()
             .then(v => {
-                console.log("Connected to database !");
                 setBdd(bdd);
                 initialised = TRUE;
                 resolve();
             }).catch(v => {
-                console.log("Error connecting to database: "+v);
                 reject(v);
                 initialised = FALSE;
             });

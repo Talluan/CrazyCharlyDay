@@ -20,7 +20,7 @@ const Avis = bdd.getBdd().define("avis", {
         allowNull: false
     },
     nbEtoiles: {
-        type: DataTypes.FLOAT,
+        type: DataTypes.INTEGER,
         allowNull: false
     },
     certifie: {
@@ -191,11 +191,17 @@ User.hasMany(Commande, {
     targetKey: "id"
 });
 
+Avis.hasOne(Produit, {
+    foreignKey: "idProduit",
+    targetKey: "id"
+});
+
 module.exports = {
     Boite,
     Categorie,
     Commande,
     Produit,
     Avis,
-    User
+    User,
+    Destinataire
 };
