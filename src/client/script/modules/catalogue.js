@@ -1,3 +1,4 @@
+import cart from "./cart.js";
 import { config } from "./config.js"
 import { setModalContent } from "./products.js"
 
@@ -10,22 +11,6 @@ function loadResource(uri) {
         });
     });
 }
-
-function getProducts(id) {
-    let pr = fetch(config.host + config.categorie + id + "/produits")
-    pr.then(resp => {
-            if (resp.ok) {
-                return resp.json();
-            } else {
-                console.log('response error : ' + resp.status)
-                return Promise.reject(new Error(resp.statusText))
-            }
-        })
-        .catch(error => {
-            console.log("erreur: " + error)
-        })
-}
-
 
 function createCategory(nom) {
     let cat = document.createElement("li")
@@ -47,6 +32,8 @@ function createCategory(nom) {
 function createProduct(nom, id) {
     let prod = document.createElement("li")
     prod.id = id
+    prod.style.cursor = "pointer";
+    prod.onclick = () => {cart.ajouterProduit(id)};
     const divrow = document.createElement("div");
     const divcol6 = document.createElement("div");
     const divcol2 = document.createElement("div");
@@ -106,6 +93,7 @@ function displayNav() {
 
 function displayBox(params) {
     let box = document.getElementById("box")
+    console.log(box)
 
     box.style.backgroundColor = "grey"
     box.innerHTML = "coucou"
