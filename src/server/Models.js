@@ -13,12 +13,19 @@ const Avis = bdd.getBdd().define("avis", {
     },
     nom: {
         type: DataTypes.STRING,
+        allowNull: false
     },
     prenom: {
         type: DataTypes.STRING,
+        allowNull: false
     },
     nbEtoiles: {
         type: DataTypes.FLOAT,
+        allowNull: false
+    },
+    certifie: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
     }
 });
 
@@ -82,12 +89,14 @@ const Commande = bdd.getBdd().define("Commande", {
     couleur: {
         type: DataTypes.STRING,
         primaryKey: false,
-        autoIncrement: false
+        autoIncrement: false,
+        allowNull: false
     },
     message: {
         type: DataTypes.STRING,
         primaryKey: false,
-        autoIncrement: false
+        autoIncrement: false,
+        allowNull: false
     }
 });
 
@@ -107,8 +116,7 @@ const Destinataire = bdd.getBdd().define("destinataire", {
         allowNull: false
     },
     mail: {
-        type: DataTypes.STRING,
-        allowNull: false
+        type: DataTypes.STRING
     },
     adresse: {
         type: DataTypes.STRING,
@@ -124,16 +132,20 @@ const User = bdd.getBdd().define("users", {
         allowNull: false
     },
     login: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false
     },
     mdp: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false
     },
     nom: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false
     },
     prenom: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false
     },
     mail: {
         type: DataTypes.STRING
@@ -142,7 +154,8 @@ const User = bdd.getBdd().define("users", {
         type: DataTypes.STRING
     },
     estAdmin: {
-        type: DataTypes.BOOLEAN
+        type: DataTypes.BOOLEAN,
+        allowNull: false
     }
 });
 
