@@ -1,7 +1,7 @@
 import config from "./config.js"
 
 function getCategories() {
-    console.log(config.config.host + "/api/categories")
+    console.log(config.host + "/api/categories")
     let pr = fetch(config.host + "/api/categories")
     pr.then(resp => {
             if (resp.ok) {
@@ -18,7 +18,7 @@ function getCategories() {
 
 function loadResource(uri) {
     return new Promise((resolve, reject) => {
-        fetch(config.config.host + uri).then(response => response.json()).then(data => {
+        fetch(config.host + uri).then(response => response.json()).then(data => {
             resolve(data);
         }).catch(error => {
             reject(error);
@@ -81,7 +81,7 @@ function displayNav() {
             ul.classList.add("btn-toggle-nav", "list-unstyled", "fw-normal", "pb-1", "small")
             let productsHTML = "";
             productsHTML += `
-            <li><div class="d-flex justify-content-between" draggable="true">Item <a type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="badge bg-info float-right">i</span></a></div></li>`
+            <li><div draggable="true">Item</div><a type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="badge bg-info">i</span></a></li>`
             html += productsHTML
             let products = loadResource("/api/categorie/" + element.id + "/produits").then(produits => {
                 // Liste des produits de la catégorie
