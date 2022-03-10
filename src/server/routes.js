@@ -54,10 +54,10 @@ module.exports = app => {
             req.body.description,
             req.body.categorie,
             req.body.poids
-        );
+        ).then(res.end);
     });
     app.post('/api/categorie',(req, res) => {
-        Categorie.creerCategorie(req.body.nom);
+        Categorie.creerCategorie(req.body.nom).then(res.end);
     });
     app.put('/api/produit/:id', (req, res) => {
         Produit.trouverProduit(req.params.id).then(produit => {
