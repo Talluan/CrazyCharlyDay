@@ -2,8 +2,12 @@ const https = require('https');
 const express = require('express');
 const fs = require("fs");
 const { Server } = require("socket.io");
-const { Sequelize, DataTypes } = require('@sequelize/core');
-const { exit } = require('process');
+const bdd = require("./server/Bdd");
+
+// base de donnee
+bdd.init().then(() => {
+    console.log("Module BDD initialise");
+});
 
 // redirection de http vers https
 require('http').createServer((req, res) => {
@@ -20,20 +24,6 @@ const app = express();
 const server = https.createServer(credentials, app);
 const io = new Server(server);
 
-let sequelize = null;
-fs.readFile(__dirname+"/conf/conf.json", (err, data) => {
-    const info = JSON.parse(data);
-    const bdd = new Sequelize(info.bddName, info.login, info.password, {
-        host: info.host,
-        dialect: "mysql",
-        port: info.port
-    });
-    bdd.authenticate()
-    .then(v => console.log("Connected to database !"))
-    .catch(v => console.log("Error connecting to database: "+v))
-    .finally(() => {sequelize = bdd;});
-});
-
 app.get('/*', (req, res) => {
     let path = req.url;
     if (req.url == "/") path = "/index.html";
@@ -47,6 +37,6 @@ io.on("connection", socket => {
     socket.on("disconnect", r => {
         console.log("socket "+socket.id+" disconnected: "+r);
     });
-})
+});
 
 server.listen(443);
