@@ -10,13 +10,17 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 let sequelize = null;
-fs.readFile(__dirname__+"/conf/conf.json", (err, data) => {
-    const info = JSON.parse(dataa);
-    sequelize = new Sequelize(info.bddName, info.login, info.password, {
+fs.readFile(__dirname+"/conf/conf.json", (err, data) => {
+    const info = JSON.parse(data);
+    const bdd = new Sequelize(info.bddName, info.login, info.password, {
         host: info.host,
         dialect: "mysql",
         port: info.port
     });
+    bdd.authenticate()
+    .then(v => console.log("Connected to database !"))
+    .catch(v => console.log("Error connecting to database: "+v))
+    .finally(() => {sequelize = bdd;});
 });
 
 app.get('/*', (req, res) => {
@@ -34,4 +38,4 @@ io.on("connection", socket => {
     });
 })
 
-server.listen(80);
+server.listen(443);
