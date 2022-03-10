@@ -1,6 +1,34 @@
 const Models = require('../Models');
 const bCrypt = require('bcrypt');
 
+function modifierCommande(idCommande, idUser, couleur, message, idbox, idDestinataire, content) {
+    const Commande = Models.getCommande();
+    const Arrangement = Models.getArrangement();
+    return new Promise((resolve, reject) => {
+        Commande.update(
+            { idUser: idUser },
+            { couleur: couleur},
+            {message: message},
+            {idbox : idbox},
+            {idDestinataire: idDestinataire},
+            { where: { id: idCommande } }
+        )
+        //on supprime et recrée les arrangements
+        Arrangement.destroy({
+            where: {id: idCommande}
+        })
+        content.forEach((idProduit, qte) => {
+            Arrangement.create({
+                idCommande: data.idCommande,
+                idProduit: idProduit,
+                qte: qte
+            })
+        })
+        resolve()
+    });
+
+}
+
 /**
  * renvoie la liste des commandes sous forme d'un JSON
  */
@@ -16,7 +44,7 @@ function listerCommande() {
                     message: commande.message,
                     idbox: commande.idbox,
                     token: commande.token,
-                    idDestinatire: commande.idDestinatire
+                    idDestinatire: commande.idDestinataire
                 };
             });
             resolve(list);
@@ -50,19 +78,35 @@ function listerProduits(idCommande) {
 /**
  * Cree une nouvelle commande
  */
-function creerCommande(idUser, couleur, message, idbox, idDestinataire) {
+function creerCommande(idUser, couleur, message, idbox, idDestinataire, content) {
     const Commande = Models.getCommande();
+    const Arrangement = Models.getArrangement();
     const token = bCrypt.hashSync(idUser + couleur + message + idbox + idDestinataire, 1);
-    return new Promise((resolve, reject) => {
-        Commande.create({
-            idUser: idUser,
-            couleur: couleur,
-            message: message,
-            idbox: idbox,
-            token: token,
-            idDestinatire: idDestinataire
-        }).then(resolve).catch(reject);
+
+    const commande = Commande.build({
+        idUser: idUser,
+        couleur: couleur,
+        message: message,
+        idbox: idbox,
+        token: token,
+        idDestinataire: idDestinataire
     });
+
+    return new Promise((resolve, reject) => {
+        commande.save()
+            .then(
+                //on met à jour les arrangements
+                content.forEach((idProduit, qte) => {
+                    Arrangement.create({
+                        idCommande: commande.id,
+                        idProduit: idProduit,
+                        qte: qte
+                    })
+                })
+            );
+        resolve()
+    })
+
 }
 
 function trouverCommande(idCommande) {
@@ -80,17 +124,18 @@ function trouverCommande(idCommande) {
      });
 }
 
-/**
- * supprime une commande
- * @param {number} id id de la commande
- */
-function supprimerCommande(id) {
+function supprimerCommande(idCommande) {
+    //on supprime les arrangements
     const Commande = Models.getCommande();
+    const Arrangement = Models.getArrangement();
     return new Promise((resolve, reject) => {
+        Arrangement.destroy({
+            where: {id: idCommande}
+        })
         Commande.destroy({
-            where: {id: id}
+            where: {id: idCommande}
         }).then(resolve).catch(reject);
-    });
+    })
 }
 
 module.exports = {
@@ -98,5 +143,6 @@ module.exports = {
     creerCommande,
     listerProduits,
     trouverCommande,
-    supprimerCommande
+    supprimerCommande,
+    modifierCommande
 };

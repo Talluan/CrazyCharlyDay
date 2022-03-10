@@ -38,7 +38,47 @@ function getCategorieProduits(id) {
     });
 }
 
+/**
+ * Cree une nouvelle catégorie
+ */
+function creerCategorie(nom) {
+    const Categorie = Models.getCategorie();
+    return new Promise((resolve, reject) => {
+        Categorie.create({
+            nom: nom
+        }).then(resolve).catch(reject)
+    })
+}
+
+/**
+ * Modifie une catégorie
+ */
+function modifierCategorie(idCategorie, nom) {
+    const Categorie = Models.getCategorie();
+    return new Promise((resolve, reject) => {
+        Categorie.update(
+            { nom: nom },
+            { where: { id: idCategorie } }
+        ).then(resolve).catch(reject)
+    })
+}
+
+/**
+ * Modifie une catégorie
+ */
+function supprimerCategorie(idCategorie) {
+    const Categorie = Models.getCategorie();
+    return new Promise((resolve, reject) => {
+        Categorie.delete(
+            { where: { id: idCategorie } }
+        ).then(resolve).catch(reject)
+    })
+}
+
 module.exports = {
     listerCategories,
-    getCategorieProduits
+    getCategorieProduits,
+    creerCategorie,
+    modifierCategorie,
+    supprimerCategorie
 };

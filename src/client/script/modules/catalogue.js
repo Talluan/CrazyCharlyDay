@@ -1,8 +1,9 @@
-import config from "./config.js"
+import { config } from "./config.js"
+import { setModalContent } from "./products.js"
 
 function loadResource(uri) {
     return new Promise((resolve, reject) => {
-        fetch(config.config.host + uri).then(response => response.json()).then(data => {
+        fetch(config.host + uri).then(response => response.json()).then(data => {
             resolve(data);
         }).catch(error => {
             reject(error);
@@ -46,19 +47,23 @@ function createCategory(nom) {
 function createProduct(nom, id) {
     let prod = document.createElement("li")
     prod.id = id
-    prod.innerHTML = `
-        <div class="row">
-            <div class="col-6">
-                ` + nom +
-        `
-            </div>
-            <div class="col-2">
-                <a type="button" data-bs-toggle="modal" data-bs-target="modal${id}"><span class="badge bg-info">i</span></a>
-            </div>
-        </div>
-        `
-
-    // console.log(prod)
+    const divrow = document.createElement("div");
+    const divcol6 = document.createElement("div");
+    const divcol2 = document.createElement("div");
+    divcol6.innerHTML = nom;
+    const a = document.createElement("a");
+    a.type = "button";
+    a.dataset.bsToggle = "modal";
+    a.dataset.bsTarget = "#exampleModal";
+    a.innerHTML = "<span class=\"badge bg-info\">i</span>";
+    a.onclick = () => { setModalContent(id); };
+    divcol2.appendChild(a);
+    divrow.classList.add("row");
+    divcol6.classList.add("col-6");
+    divcol2.classList.add("col-2");
+    divrow.appendChild(divcol6);
+    divrow.appendChild(divcol2);
+    prod.appendChild(divrow);
     return prod
 }
 
@@ -73,44 +78,21 @@ function displayNav() {
         cat.innerHTML = ""
         let html = document.createElement("div");
         categories.forEach(element => {
-            // console.log(element)
             html.appendChild(createCategory(element.nom))
             let div = document.createElement("div")
             div.classList.add("collapse", "show")
             div.id = element.nom + "-collapse"
 
-
             let ul = document.createElement("ul")
             ul.classList.add("btn-toggle-nav", "list-unstyled", "fw-normal", "pb-1", "small")
-                // let productsHTML = "";
-                // productsHTML += `
-                // <li><div draggable="true">Item</div><a type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="badge bg-info">i</span></a></li>`
-                // html += productsHTML
-                // console.log("/api/categorie/" + element.id + "/produits")
             loadResource("/api/categorie/" + element.id + "/produits").then(produits => {
-                // Liste des produits de la catégorie
-                // productsHTML += `
-                //     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                //         <li draggable="true">
-                //             Item<a type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="badge bg-info">i</span></a>
-                //         </li>
-                //     </ul>
-
-                // `
                 produits.forEach(prod => {
                     let a = createProduct(prod.titre, prod.id);
-                    // console.log(a)
                     ul.appendChild(a)
                 });
 
             })
             div.appendChild(ul)
-            console.log(div)
-                // console.log(ul)
-                // console.log("---------------------")
-                // console.log(div)
-                // console.log(div.textContent)
-
             html.appendChild(div)
 
             // console.log(html)
@@ -122,7 +104,16 @@ function displayNav() {
 
 }
 
+function displayBox(params) {
+    let box = document.getElementById("box")
+    console.log(box)
+
+    box.style.backgroundColor = "grey"
+    box.innerHTML = "coucou"
+
+}
 
 export default {
-    displayNav
+    displayNav,
+    displayBox
 }

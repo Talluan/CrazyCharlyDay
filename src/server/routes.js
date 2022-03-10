@@ -21,15 +21,18 @@ module.exports = app => {
     });
     app.get('/api/produit/:id', (req, res) => {
         Produit.trouverProduit(req.params.id)
-        .then(produit => res.json(
-            {
-                id: produit.id,
-                nom: produit.nom,
-                description: produit.description,
-                prix: produit.prix,
-                poids: produit.poids
-            }
-        ))
+        .then(produit => {
+            console.log(produit);
+            res.json(
+                {
+                    id: produit.id,
+                    titre: produit.titre,
+                    description: produit.description,
+                    categorie: produit.categorie,
+                    poids: produit.poids
+                }
+            )
+        })
         .catch(err => res.status(500).json(err));
     });
     app.get('/api/commande/:idcommande/', (req, res) => {
@@ -37,7 +40,7 @@ module.exports = app => {
         .then(commande => res.json(commande))
         .catch(err => res.status(500).json(err));   
     });
-    app.post('/api/commande', (res, req) => {
+    app.post('/api/commande', (req, res) => {
         Commande.creerCommande(
             req.body.idUser,
             req.body.couleur,
@@ -48,17 +51,17 @@ module.exports = app => {
         );
     });
     app.post('/api/produit',(req, res) => {
-        Produit.create.creerProduit(
+        Produit.creerProduit(
             req.body.titre,
             req.body.description,
             req.body.categorie,
             req.body.poids
-        );
+        ).then(res.end);
     });
     app.post('/api/categorie',(req, res) => {
-
+        Categorie.creerCategorie(req.body.nom).then(() => res.end());
     });
-    app.put('/api/produit/:id', (res, req) => {
+    app.put('/api/produit/:id', (req, res) => {
         Produit.trouverProduit(req.params.id).then(produit => {
             if (produit) {
                 produit.update({
@@ -77,37 +80,25 @@ module.exports = app => {
             }
         }).catch(err => res.status(500).json(err));
     });
-    app.put('/api/commande/:id', (res, req) => {
-        // Commande.trouverCommande(req.params.id).then(commande => {
-        //     if (commande) {
-        //         commande.update({
-        //             couleur: req.body.couleur,
-        //             message: req.body.message,
-        //             idBox: req.body.idBox,
-        //             idDestinataire: req.body.idDestinataire,
-        //             content: req.body.content
-        //         });
-        //     } else {
-        //         Commande.create({
-        //             couleur: req.body.couleur,
-        //             message: req.body.message,
-        //             idBox: req.body.idBox,
-        //             idDestinataire: req.body.idDestinataire,
-        //             content: req.body.content
-        //         });
-        //     }
-        // }).catch(err => res.status(500).json(err));
+    app.put('/api/commande/:id', (req, res) => {
+        Commande.modifierCommande(req.params.id, req.body.idUser,
+            req.body.couleur,
+            req.body.message,
+            req.body.idBox,
+            req.body.idDestinataire,
+            req.body.content);
     });
-    app.put('/api/categorie/:id', (res, req) => {
-        
+    app.put('/api/categorie/:id', (req, res) => {
+        Categorie.modifierCategorie(req.params.id, req.body.nom);
     });
-    app.delete('/api/produit/:id', (res, req) => {
-        Produit.supprimerProduit(res.params.id);
+    app.delete('/api/produit/:id', (req, res) => {
+        Produit.supprimerProduit(req.params.id);
     });
-    app.delete('/api/commande/:id', (res, req) => {
-        Commande.supprimerCommande(res.params.id);
+    app.delete('/api/commande/:id', (req, res) => {
+        Commande.supprimerCommande(req.params.id);
     });
-    app.delete('/api/categorie/:id', (res, req) => {
+    app.delete('/api/categorie/:id', (req, res) => {
+        Categorie.supprimerCategorie(req.params.id);
     });
     app.post('/register', (req, res) => {
         const b = req.body;
