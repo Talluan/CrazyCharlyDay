@@ -22,10 +22,6 @@ descr.onchange = () => {
     descrText.innerHTML = descr.value;
 }
 
-prix.onchange = () => {
-    prixText.innerHTML = prix.value + " €";
-}
-
 poids.onchange = () => {
     poidsText.innerHTML = poids.value + " g";
 }
