@@ -42,8 +42,8 @@ function creerProduit(titre, description, categorie, poids) {
 
 
 function trouverProduit(idProduit) {
+    const Produit = Models.getProduit();
     return new Promise((resolve, reject) => {
-        const Produit = Models.getProduit();
         Produit.findOne({
             where: {id: idProduit}
         }).then(resolve)
