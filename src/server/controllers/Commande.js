@@ -83,25 +83,27 @@ function creerCommande(idUser, couleur, message, idbox, idDestinataire, content)
     const Arrangement = Models.getArrangement();
     const token = bCrypt.hashSync(idUser + couleur + message + idbox + idDestinataire, 1);
 
+    const commande = Commande.build({
+        idUser: idUser,
+        couleur: couleur,
+        message: message,
+        idbox: idbox,
+        token: token,
+        idDestinataire: idDestinataire
+    });
+
     return new Promise((resolve, reject) => {
-        //on crée la commande
-        Commande.create({
-            idUser: idUser,
-            couleur: couleur,
-            message: message,
-            idbox: idbox,
-            token: token,
-            idDestinataire: idDestinataire
-        }).then(data => {
-            //on met à jour les arrangements
-            content.forEach((idProduit, qte) => {
-                Arrangement.create({
-                    idCommande: data.idCommande,
-                    idProduit: idProduit,
-                    qte: qte
+        commande.save()
+            .then(
+                //on met à jour les arrangements
+                content.forEach((idProduit, qte) => {
+                    Arrangement.create({
+                        idCommande: commande.id,
+                        idProduit: idProduit,
+                        qte: qte
+                    })
                 })
-            })
-        })
+            );
         resolve()
     })
 
