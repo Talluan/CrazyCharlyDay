@@ -49,7 +49,7 @@ module.exports = app => {
         );
     });
     app.post('/api/produit',(req, res) => {
-        Produit.create.creerProduit(
+        Produit.creerProduit(
             req.body.titre,
             req.body.description,
             req.body.categorie,
