@@ -47,8 +47,8 @@
                             </button>
                             <div class="collapse show" id="beaute-collapse">
                                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                    <li>
-                                        <div draggable="true">Item</div><a type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="badge bg-info">i</span></a>
+                                    <li draggable="true">
+                                        Item<a type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="badge bg-info">i</span></a>
                                     </li>
                                 </ul>
                             </div>
@@ -142,16 +142,25 @@
             </div>
         </div>
 
-        <div class="card d-flex" style="width: 25rem;">
-            <div class="col justify-content-center">
-                <div class="card d-flex" style="width: 18rem;">
-                    <img class="card-img-top" src="..." alt="Card image cap">
-                    <div class="card-body">
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src="images/logo/logo.png" alt="Image">
+            <hr>
+            <div class="card-body">
+                <h5 class="card-title text-center">Nom Item</h5>
+                <p class="card-text text-center">Poids Item</p>
+            </div>
+            <div class="card-footer">
+                <div class="col">
+                    <div class="row">
+                        <div class="col d-flex justify-content-center">
+                            <button id="inf" type="button" class="btn btn-primary">X</button>
+                        </div>
+                        <div class="col d-flex justify-content-center">
+                            <a type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="badge bg-info">+</span></a>
+                        </div>
                     </div>
                 </div>
             </div>
-
         </div>
 
 
