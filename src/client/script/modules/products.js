@@ -5,10 +5,10 @@ export function setModalContent(idProduit) {
         document.getElementById("exampleModal").innerHTML = `<div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header justify-content-center">
-                <h5 class="modal-title text-center" id="exampleModalLabel">${produit.nom}</h5>
+                <h5 class="modal-title text-center" id="exampleModalLabel">${produit.titre}</h5>
             </div>
             <div id="photoProd">
-                <img class="rounded mx-auto d-block" src="./images/produits/${idProduit}">
+                <img class="rounded mx-auto d-block" src="./images/produits/${idProduit}.jpg">
             </div>
             <hr>
             <div class="modal-body">
@@ -20,9 +20,6 @@ export function setModalContent(idProduit) {
             <div class="modal-footer">
                 <div class="col">
                     <div class="row">
-                        <div class="col d-flex justify-content-center">
-                            Prix : ${produit.prix}
-                        </div>
                         <div class="col d-flex justify-content-center">
                             Poids : ${produit.poids}
                         </div>
