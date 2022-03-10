@@ -7,7 +7,7 @@ const bdd = require("./server/Bdd");
 
 // base de donnee
 bdd.init().then(() => {
-    console.log("Module BDD initialise");
+    require("./server/Models").init();
 });
 
 // redirection de http vers https

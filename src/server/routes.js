@@ -1,22 +1,17 @@
+const express = require('express');
+const Categorie = require("./controllers/Categorie");
+
 /**
- * 
- * @param {Express.Application} app 
+ * @param {express.Express} app 
  */
 module.exports = app => {
     app.get("/api/categories", (req, res) => {
-        if (!req.body) {
-            res.status(400).send({
-                message: "Content can not be empty!"
-            });
-        }
-        res.json({
-            message: 'test'
-        });
-        console.log("test");
-
+        Categorie.listerCategories()
+        .then(categories => res.json(categories))
+        .catch(err => res.status(500).json(err));
     });
     app.get('/api/categorie/:id/produits', (req, res) => {
-
+        
     });
     app.get('/api/produit/:id', (req, res) => {
 
