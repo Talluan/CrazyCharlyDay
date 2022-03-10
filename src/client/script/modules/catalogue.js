@@ -71,20 +71,28 @@ function createProduct(nom, id) {
  */
 function displayNav() {
     // fetch('https://localhost/api/categories').then(e => e.json()).then(e => console.log(e));
-    let categories = loadResource("/api/categories").then(elem => {
+    let categories = loadResource("/api/categories").then(categories => {
         let cat = document.getElementById("categories")
         let html = "";
-
-        Array.of(elem).forEach(element => {
+        categories.forEach(element => {
+            console.log(element)
             html += createCategory(element.nom)
             let ul = document.createElement("ul")
             ul.classList.add("btn-toggle-nav", "list-unstyled", "fw-normal", "pb-1", "small")
+            let productsHTML = "";
+            productsHTML += `
+            <li><div draggable="true">Item</div><a type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="badge bg-info">i</span></a></li>`
+            html += productsHTML
             let products = loadResource("/api/categorie/" + element.id + "/produits").then(produits => {
                 // Liste des produits de la catégorie
                 let productsHTML = "";
+                productsHTML += `
+                <li draggable="true">Item<a type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="badge bg-info">i</span></a></li>`
                 produits.forEach(prod => {
                     productsHTML += createProduct(prod.titre, prod.id)
                 });
+                console.log(productsHTML)
+                html += productsHTML
             })
 
 
