@@ -19,7 +19,15 @@ module.exports = app => {
     });
     app.get('/api/produit/:id', (req, res) => {
         Produit.trouverProduit(req.params.id)
-        .then(produit => res.json(produit))
+        .then(produit => res.json(
+            {
+                id: produit.id,
+                nom: produit.nom,
+                description: produit.description,
+                prix: produit.prix,
+                poids: produit.poids
+            }
+        ))
         .catch(err => res.status(500).json(err));
     });
     app.get('/api/commande/:idcommande/', (req, res) => {

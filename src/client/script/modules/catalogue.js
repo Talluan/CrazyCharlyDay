@@ -1,21 +1,5 @@
 import config from "./config.js"
 
-function getCategories() {
-    console.log(config.config.host + "/api/categories")
-    let pr = fetch(config.host + "/api/categories")
-    pr.then(resp => {
-            if (resp.ok) {
-                return resp.json();
-            } else {
-                console.log('response error : ' + response.status)
-                return Promise.reject(new Error(response.statusText))
-            }
-        })
-        .catch(error => {
-            console.log("erreur: " + error)
-        })
-}
-
 function loadResource(uri) {
     return new Promise((resolve, reject) => {
         fetch(config.config.host + uri).then(response => response.json()).then(data => {
@@ -43,14 +27,15 @@ function getProducts(id) {
 
 
 function createCategory(nom) {
-    let html = `
-        <li class="mb-1">
-            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#beaute-collapse" aria-expanded="true">
-                ${nom}
-            </button>
-        </li>
-        `
-    return html
+    let cat = document.createElement("li")
+    cat.innerHTML = `
+    <li class="mb-1">
+        <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#beaute-collapse" aria-expanded="true">
+            ${nom}
+        </button>
+    </li>
+    `
+    return cat
 }
 
 /**
@@ -59,9 +44,21 @@ function createCategory(nom) {
  * @param {int} id 
  */
 function createProduct(nom, id) {
-    let prod = document.createElement(li)
+    let prod = document.createElement("li")
     prod.id = id
-    prod.innerHTML = nom + `<a type="button" data-bs-toggle="modal" data-bs-target="${id}"><span class="badge bg-info">i</span></a>`
+    prod.innerHTML = `
+        <div class="row">
+            <div class="col-6">
+                ` + nom +
+        `
+            </div>
+            <div class="col-2">
+                <a type="button" data-bs-toggle="modal" data-bs-target="modal${id}"><span class="badge bg-info">i</span></a>
+            </div>
+        </div>
+        `
+
+    // console.log(prod)
     return prod
 }
 
@@ -73,32 +70,53 @@ function displayNav() {
     // fetch('https://localhost/api/categories').then(e => e.json()).then(e => console.log(e));
     let categories = loadResource("/api/categories").then(categories => {
         let cat = document.getElementById("categories")
-        let html = "";
+        cat.innerHTML = ""
+        let html = document.createElement("div");
         categories.forEach(element => {
-            console.log(element)
-            html += createCategory(element.nom)
+            // console.log(element)
+            html.appendChild(createCategory(element.nom))
+            let div = document.createElement("div")
+            div.classList.add("collapse", "show")
+            div.id = element.nom + "-collapse"
+
+
             let ul = document.createElement("ul")
             ul.classList.add("btn-toggle-nav", "list-unstyled", "fw-normal", "pb-1", "small")
-            let productsHTML = "";
-            productsHTML += `
-            <li><div class="d-flex justify-content-between" draggable="true">Item <a type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="badge bg-info float-right">i</span></a></div></li>`
-            html += productsHTML
-            let products = loadResource("/api/categorie/" + element.id + "/produits").then(produits => {
+                // let productsHTML = "";
+                // productsHTML += `
+                // <li><div draggable="true">Item</div><a type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="badge bg-info">i</span></a></li>`
+                // html += productsHTML
+                // console.log("/api/categorie/" + element.id + "/produits")
+            loadResource("/api/categorie/" + element.id + "/produits").then(produits => {
                 // Liste des produits de la catégorie
-                let productsHTML = "";
-                productsHTML += `
-                <li draggable="true">Item<a type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="badge bg-info">i</span></a></li>`
+                // productsHTML += `
+                //     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                //         <li draggable="true">
+                //             Item<a type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="badge bg-info">i</span></a>
+                //         </li>
+                //     </ul>
+
+                // `
                 produits.forEach(prod => {
-                    productsHTML += createProduct(prod.titre, prod.id)
+                    let a = createProduct(prod.titre, prod.id);
+                    // console.log(a)
+                    ul.appendChild(a)
                 });
-                console.log(productsHTML)
-                html += productsHTML
+
             })
+            div.appendChild(ul)
+            console.log(div)
+                // console.log(ul)
+                // console.log("---------------------")
+                // console.log(div)
+                // console.log(div.textContent)
 
+            html.appendChild(div)
 
+            // console.log(html)
         });
 
-        cat.innerHTML = html
+        cat.appendChild(html)
     });
 
 
