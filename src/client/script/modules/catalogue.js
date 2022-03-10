@@ -56,7 +56,7 @@ function createProduct(nom, id) {
     a.dataset.bsToggle = "modal";
     a.dataset.bsTarget = "#exampleModal";
     a.innerHTML = "<span class=\"badge bg-info\">i</span>";
-    a.onclick = () => {setModalContent(id);};
+    a.onclick = () => { setModalContent(id); };
     divcol2.appendChild(a);
     divrow.classList.add("row");
     divcol6.classList.add("col-6");
@@ -104,7 +104,16 @@ function displayNav() {
 
 }
 
+function displayBox(params) {
+    let box = document.getElementById("box")
+    console.log(box)
+
+    box.style.backgroundColor = "grey"
+    box.innerHTML = "coucou"
+
+}
 
 export default {
-    displayNav
+    displayNav,
+    displayBox
 }
